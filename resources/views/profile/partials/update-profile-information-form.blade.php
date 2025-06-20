@@ -18,8 +18,8 @@
         @method('patch')
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-input-label for="nama" :value="__('Name')" />
+            <x-text-input id="nama" name="nama" type="text" class="mt-1 block w-full" :value="old('nama', $user->nama)" required autofocus autocomplete="nama" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
@@ -46,6 +46,26 @@
                 </div>
             @endif
         </div>
+
+        {{-- update poli --}}
+
+        @if (Auth::user()->role === 'dokter')
+
+        <div>
+            <x-input-label for="poli_id" :value="__('Poli')" />
+            <select id="poli_id" name="poli_id" class="mt-1 block w-full" required>
+                <option value="" disabled>{{ __('Select Poli') }}</option>
+                @foreach ($polis as $poli)
+                    <option value="{{ $poli->id }}" {{ $user->poli_id === $poli->id ? 'selected' : '' }}>
+                        {{ $poli->nama }}
+                    </option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('poli_id')" />
+        </div>
+        @endif
+
+        {{-- end update poli --}}
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>

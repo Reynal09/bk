@@ -24,21 +24,19 @@ class JadwalPeriksaSeeder extends Seeder
         // Create schedules for each doctor
         foreach ($dokters as $dokter) {
             // Assign 2 working days per doctor (different for each)
-            $doctorDays = array_slice($days, $dokter->id % 5, 7);
+            $doctorDays = array_slice($days, $dokter->id % 5, 2);
 
             $firstSchedule = true; // Flag to mark only the first schedule as active
 
-            $jamPulang = ['12:00:00', '13:00:00', '14:00:00'];
             foreach ($doctorDays as $day) {
                 // Morning schedule (8:00 - 12:00)
                 JadwalPeriksa::create([
                     'id_dokter' => $dokter->id,
                     'hari' => $day,
                     'jam_mulai' => '08:00:00',
-                    'jam_selesai' => $jamPulang[rand(0, count($jamPulang)-1)],
+                    'jam_selesai' => '12:00:00',
                     'status' => $firstSchedule ? true : false, // Only first schedule is active (true)
-                ]
-            );
+                ]);
 
                 $firstSchedule = false; // Mark subsequent schedules as inactive
 

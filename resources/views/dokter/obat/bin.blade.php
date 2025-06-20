@@ -12,19 +12,25 @@
                 <section>
                     <header class="flex items-center justify-between">
                         <h2 class="text-lg font-medium text-gray-900">
-                            {{ __('Daftar Obat') }}
+                            {{ __('Daftar Obat Terhapus') }}
                         </h2>
-
-                        <div class="flex-col items-center justify-center text-center">
-                            <a href="{{route('dokter.obat.create')}}" class="btn btn-primary">Tambah Obat</a>
-                        </div>
                     </header>
 
-                    {{-- lihat obat terhapus --}}
+                    {{-- link to obat index --}}
                     <div class="mt-4">
-                        <a href="{{ route('dokter.obat.bin') }}" class="text-sm text-blue-600 hover:underline">
-                            Lihat Obat Terhapus
+                        <a href="{{ route('dokter.obat.index') }}" class="text-sm text-blue-600 hover:underline">
+                            Kembali ke Daftar Obat
                         </a>
+                    </div>
+
+                    {{-- success flash message, auto hide in 3s with alpine --}}
+                    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" class="mt-4">
+                        @if (session('success'))
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                                <strong class="font-bold">Success!</strong>
+                                <span class="block sm:inline">{{ session('success') }}</span>
+                            </div>
+                        @endif
                     </div>
 
                     <table class="table mt-6 overflow-hidden rounded table-hover">
@@ -45,12 +51,11 @@
                                 <td class="align-middle text-start">{{ $obat->kemasan }}</td>
                                 <td class="align-middle text-start">{{ $obat->harga }}</td>
                                 <td class="flex items-center gap-3">
-                                    <a href="{{route('dokter.obat.edit', $obat->id  )}}" class="btn btn-secondary btn-sm">Edit</a>
-                                    <form action="{{route('dokter.obat.destroy', $obat->id)}}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
+                                   <form action="{{route('dokter.obat.restore', $obat->id)}}" method="POST">
+                                       @csrf
+                                       @method('PATCH')
+                                       <button type="submit" class="btn btn-success btn-sm">Restore</button>
+                                   </form>
                                 </td>
                             </tr>
                             @endforeach
